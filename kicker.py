@@ -54,9 +54,15 @@ def start_server():
     httpd.serve_forever()
     return
 
+def start_command_server():
+    # Hosts a RESTful Command WS
+    # TODO: Map base URI to key command processor
+    return
+
 def main():
     choice = do_menu()
     start_server()
+    start_command_server()
 
     while choice.lower() != 'q':
         choice = do_menu()
