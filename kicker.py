@@ -1,6 +1,16 @@
+import sys
+
 from mako.template import Template
 
-menu_actions = {
+import BaseHTTPServer
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+
+HandlerClass = SimpleHTTPRequestHandler
+ServerClass  = BaseHTTPServer.HTTPServer
+Protocol     = "HTTP/1.0"
+Port         = 38149
+
+MenuActions = {
     'c':    [],     # Configure
     'o':    [],     # Select OS
 }
@@ -32,13 +42,26 @@ def process_command(cmd):
     # TODO: Any exception handling
     return
 
+def start_server():
+    # TODO: Fork
+    # TODO: Customise!
+    server_address = ('0.0.0.0', Port)
+    HandlerClass.protocol_version = Protocol
+    httpd = ServerClass(server_address, HandlerClass)
+
+    sa = httpd.socket.getsockname()
+    print "Serving HTTPD on ", sa[0], " port ", sa[1], "..."
+    httpd.serve_forever()
+    return
+
 def main():
     choice = do_menu()
+    start_server()
 
     while choice.lower() != 'q':
         choice = do_menu()
-        if hasattr(menu_actions, choice):
-            process_command(menu_actions[choice])
+        if hasattr(MenuActions, choice):
+            process_command(MenuActions[choice])
     return
 
 if __name__ == "__main__":
