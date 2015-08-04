@@ -1,16 +1,16 @@
-MENU = [
-    ["n",   "New"],
-    ["c",   "Configure"],
-    ["q",   "Quit"]
-]
+from mako.template import Template
+
+menu_actions = {
+    'c':    [],     # Configure
+    'o':    [],     # Select OS
+}
 
 def do_menu():
     print chr(27) + "[2J"
     print "\nKicker - produce and serve kickstart files:\n\n"
     
-    for m in MENU:
-        print "\t%s)\t:\t%s" % (m[0], m[1])
-
+    menu = Template(filename='menu/menu.tmpl', module_directory='/tmp')
+    print(menu.render())
     do_status()
     
     try:
@@ -23,13 +23,22 @@ def do_menu():
 
 def do_status():
     print "\n\n\tServer status: Not implemented\n"
+    return
+
+def process_command(cmd):
+    # TODO: Initialization of kickstart "engine"
+    # TODO: Print command template
+    # TODO: Execute necessary commands
+    # TODO: Any exception handling
+    return
 
 def main():
     choice = do_menu()
 
     while choice.lower() != 'q':
         choice = do_menu()
-        # TODO: Process the choice
+        if hasattr(menu_actions, choice):
+            process_command(menu_actions[choice])
     return
 
 if __name__ == "__main__":
